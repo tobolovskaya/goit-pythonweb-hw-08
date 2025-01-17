@@ -26,7 +26,7 @@ class DatabaseSessionManager:
             yield session
         except SQLAlchemyError as e:
             await session.rollback()
-            raise  # Re-raise the original error
+            raise e
         finally:
             await session.close()
 

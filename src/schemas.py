@@ -1,40 +1,30 @@
-from datetime import datetime
-from typing import List, Optional
+from datetime import date, datetime
+from typing import Optional
 from pydantic import BaseModel, Field, ConfigDict
 
 
-class TagModel(BaseModel):
-    name: str = Field(max_length=25)
-
-
-class TagResponse(TagModel):
-    id: int
+class ContactBase(BaseModel):
+    name: str = Field(..., max_length=50)
+    surname: str = Field(..., max_length=50)
+    email: str = Field(..., max_length=50)
+    phone: str = Field(..., max_length=15)
+    birthday: date
+    additional_info: Optional[str] = Field(None, max_length=255)
 
     model_config = ConfigDict(from_attributes=True)
 
 
-class NoteBase(BaseModel):
-    title: str = Field(max_length=50)
-    description: str = Field(max_length=150)
+class ContactCreate(ContactBase):
+    pass
 
 
-class NoteModel(NoteBase):
-    tags: List[int]
+class ContactUpdate(ContactBase):
+    pass
 
 
-class NoteUpdate(NoteModel):
-    done: bool
-
-
-class NoteStatusUpdate(BaseModel):
-    done: bool
-
-
-class NoteResponse(NoteBase):
+class ContactResponse(ContactBase):
     id: int
-    done: bool
-    created_at: datetime | None
-    updated_at: Optional[datetime] | None
-    tags: List[TagResponse] | None
+    created_at: datetime
+    updated_at: datetime
 
     model_config = ConfigDict(from_attributes=True)
